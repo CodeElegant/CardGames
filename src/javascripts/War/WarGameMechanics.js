@@ -21,7 +21,7 @@ class WarGameMechanics {
             for (let card of this.#deck[i]) {
                 let cardValue = card.get('value');
                 let cardText = card.get('rank') + " of " + card.get('suit');
-                console.log(`Card ${count} value = ${cardValue}, Card = ${cardText}`);
+                // console.log(`Card ${count} value = ${cardValue}, Card = ${cardText}`);
                 count++;
             }
         }
@@ -41,11 +41,25 @@ class WarGameMechanics {
             for (let j = 0; j < DEAL_SIZE; j++) {
                 this.#players[i].setHand(this.#deck[0].shift());
             }
-            console.log(this.#players[i].getHand());
+            // console.log(this.#players[i].getHand());
         }
     }
 
     #play() {
+        let player0Card, player1Card;
+        let player0Hand = this.#players[0].getHand(), player1Hand = this.#players[1].getHand();
+        while (player0Hand.length > 0 || player1Hand.length > 0) {
+            player0Card = player0Hand.shift();
+            player1Card = player1Hand.shift();
+            console.log(`Player 0 card = ${player0Card.get('value')}`);
+            console.log(`Player 1 card = ${player1Card.get('value')}`);
+        }
+
+
+
+
+
+
         console.log(`
         Each player turns up a card at the same time and the player with the higher card takes both 
         cards and puts them, face down, on the bottom of his stack. If the cards are the same rank, it is War.

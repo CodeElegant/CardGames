@@ -1,0 +1,17 @@
+{
+  "name": "card_games",
+  "version": "1.0.0",
+  "description": "JavaScript BCard Games",
+  "main": "Main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "oop",
+    "collections",
+    "access",
+    "modifiers"
+  ],
+  "author": "Howard bates (bates4e@gmail.com)",
+  "license": "ISC"
+}

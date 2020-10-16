@@ -54,16 +54,19 @@ class WarGameMechanics {
         while (1) {
             player0Card = player0Hand.shift();
             player1Card = player1Hand.shift();
-            console.log(`Player 0 card = ${player0Card.get('value')}`);
-            console.log(`Player 1 card = ${player1Card.get('value')}`);
-
-            if (player0Card !== player1Card) {
+            if (player0Card.get('value') !== player1Card.get('value')) {
+                console.log(`Player0Pot Length = ${player0Pot.length}`);
                 player0Pot.push(player0Card);
+                // console.log(`Player 0 card = ${player0Card.get('value')}`);
+                console.log(`Player0Pot Length = ${player0Pot.length}`);
                 player1Pot.push(player1Card);
-                if (player0Card > player1Card) {
+                // console.log(`Player 1 card = ${player1Card.get('value')}`);
+                if (player0Card.get('value') > player1Card.get('value')) {
                     player0Hand = player0Hand.concat(player0Pot, player1Pot);
+                    // console.log(`Player 0 hand size:  ${player0Hand.length}`);
                 } else {
                     player1Hand = player1Hand.concat(player0Pot, player1Pot);
+                    // console.log(`Player 1 hand size:  ${player1Hand.length}`);
                 }
                 player0Pot = [];
                 player1Pot = [];

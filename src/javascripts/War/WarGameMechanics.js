@@ -44,8 +44,7 @@ class WarGameMechanics {
             }
         }
     }
-
-    #play() {
+    async #play() {
         const MIN_HAND_SIZE = 3;
         let round = 1;
         let player0Pot = [], player1Pot = [];
@@ -55,18 +54,15 @@ class WarGameMechanics {
             player0Card = player0Hand.shift();
             player1Card = player1Hand.shift();
             if (player0Card.get('value') !== player1Card.get('value')) {
-                console.log(`Player0Pot Length = ${player0Pot.length}`);
                 player0Pot.push(player0Card);
-                // console.log(`Player 0 card = ${player0Card.get('value')}`);
-                console.log(`Player0Pot Length = ${player0Pot.length}`);
+                console.log(`Player 0 card = ${player0Card.get('value')}`);
                 player1Pot.push(player1Card);
-                // console.log(`Player 1 card = ${player1Card.get('value')}`);
+                console.log(`Player 1 card = ${player1Card.get('value')}`);
+                await new Promise(r => setTimeout(r, 500));
                 if (player0Card.get('value') > player1Card.get('value')) {
                     player0Hand = player0Hand.concat(player0Pot, player1Pot);
-                    // console.log(`Player 0 hand size:  ${player0Hand.length}`);
                 } else {
                     player1Hand = player1Hand.concat(player0Pot, player1Pot);
-                    // console.log(`Player 1 hand size:  ${player1Hand.length}`);
                 }
                 player0Pot = [];
                 player1Pot = [];
@@ -79,16 +75,21 @@ class WarGameMechanics {
                     break;
                 }
                 round++;
-            } else if (player0Hand.length < MIN_HAND_SIZE && player1Hand.length < MIN_HAND_SIZE) {
+            } else if (player0Hand.length < MIN_HAND_SIZE || player1Hand.length < MIN_HAND_SIZE) {
                 console.log(`Not enough cards.....PUSH!`);
+                await new Promise(r => setTimeout(r, 500));
                 break;
             } else {
+                console.log(`WAR!`);
                 player0Pot.push(player0Card);
                 player1Pot.push(player1Card);
-                player0Pot = player0Hand.shift();
-                player1Pot = player1Hand.shift();
-                player0Pot = player0Hand.shift();
-                player1Pot = player1Hand.shift();
+                player0Pot.push(player0Hand.shift());
+                player0Pot.push(player0Hand.shift());
+                player1Pot.push(player1Hand.shift());
+                player1Pot.push(player1Hand.shift());
+                console.log(player0Pot);
+                console.log(player0Pot);
+                await new Promise(r => setTimeout(r, 500));
             }
         }
 

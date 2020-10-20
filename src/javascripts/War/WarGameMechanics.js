@@ -2,6 +2,7 @@
 
 const DECK = require('../Deck.js');
 const PLAYER = require('../Player.js');
+const SAVE = require('./SaveData.js');
 
 class WarGameMechanics {
     #deck = [];
@@ -12,6 +13,8 @@ class WarGameMechanics {
         this.#setPlayers();
         this.#dealCards();
         this.#play();
+        // this.#testSave();
+        this.#displayGameData();
     }
 
     #createDeck(numDecks, hasJokers) {
@@ -47,7 +50,7 @@ class WarGameMechanics {
     async #play() {
         const MIN_HAND_SIZE = 3;
         let round = 1;
-        let player0Pot = [], player1Pot = [];
+        let player0Pot = [], player1Pot = [], playerWin = [];
         let player0Card, player1Card;
         let player0Hand = this.#players[0].getHand(), player1Hand = this.#players[1].getHand();
         while (1) {
@@ -55,41 +58,57 @@ class WarGameMechanics {
             player1Card = player1Hand.shift();
             if (player0Card.get('value') !== player1Card.get('value')) {
                 player0Pot.push(player0Card);
-                console.log(`Player 0 card = ${player0Card.get('value')}`);
+                console.log(`Player 0 card = ${player0Card.get('rank')} of ${player0Card.get('suit')}`);
                 player1Pot.push(player1Card);
-                console.log(`Player 1 card = ${player1Card.get('value')}`);
-                await new Promise(r => setTimeout(r, 500));
+                console.log(`Player 1 card = ${player1Card.get('rank')} of ${player1Card.get('suit')}`);
+                // await new Promise(r => setTimeout(r, 100));
                 if (player0Card.get('value') > player1Card.get('value')) {
                     player0Hand = player0Hand.concat(player0Pot, player1Pot);
+                    console.log(`Player 0 hand size = ${player0Hand.length}`);
                 } else {
                     player1Hand = player1Hand.concat(player0Pot, player1Pot);
+                    console.log(`Player 1 hand size = ${player1Hand.length}`);
                 }
                 player0Pot = [];
                 player1Pot = [];
                 if (player0Hand.length === 0) {
                     console.log(`Player 1 wins in ${round} rounds!`);
+                    playerWin.push('Player_1',round);
+                    // await new Promise(r => setTimeout(r, 500));
+                    SAVE.writeGameData(playerWin);
                     break;
                 }
                 if (player1Hand.length === 0) {
                     console.log(`Player 0 wins in ${round} rounds!`);
+                    playerWin.push('Player_0',round);
+                    // await new Promise(r => setTimeout(r, 500));
+                    SAVE.writeGameData(playerWin);
                     break;
                 }
                 round++;
             } else if (player0Hand.length < MIN_HAND_SIZE || player1Hand.length < MIN_HAND_SIZE) {
                 console.log(`Not enough cards.....PUSH!`);
-                await new Promise(r => setTimeout(r, 500));
+                playerWin.push(`PUSH!`, round);
+                SAVE.writeGameData(playerWin);
+                // await new Promise(r => setTimeout(r, 500));
                 break;
             } else {
                 console.log(`WAR!`);
                 player0Pot.push(player0Card);
+                player0Pot.push(player0Hand.shift());
+                player0Pot.push(player0Hand.shift());
+
                 player1Pot.push(player1Card);
-                player0Pot.push(player0Hand.shift());
-                player0Pot.push(player0Hand.shift());
                 player1Pot.push(player1Hand.shift());
                 player1Pot.push(player1Hand.shift());
-                console.log(player0Pot);
-                console.log(player0Pot);
-                await new Promise(r => setTimeout(r, 500));
+
+                for (let i = 0; i < player0Pot.length; i++) {
+                    console.log(`Player 0 pot = ${player0Pot[i].get('value')}`);
+                }
+                for (let i = 0; i < player1Pot.length; i++) {
+                    console.log(`Player 1 pot = ${player1Pot[i].get('value')}`);
+                }
+                await new Promise(r => setTimeout(r, 100));
             }
         }
 
@@ -100,6 +119,24 @@ class WarGameMechanics {
         piles (six cards). If the turned-up cards are again the same rank, each player places another card face down
         and turns another card face up. The player with the higher card takes all 10 cards, and so on.
         `)*/
+    }
+
+    #testSave() {
+        const MAX = 5000;
+        let count = 0;
+        let playerWin = [];
+        let playNum;
+        while (count < 20) {
+            playerWin = [];
+            playNum = Math.floor((Math.random() * MAX));
+            playerWin.push(`Player wins! ${count}`, playNum);
+            SAVE.writeGameData(playerWin);
+            count++;
+        }
+    }
+
+    #displayGameData() {
+        SAVE.readGameData();
     }
 }
 

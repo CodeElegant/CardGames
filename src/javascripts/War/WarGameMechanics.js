@@ -53,6 +53,8 @@ class WarGameMechanics {
         let player0Card, player1Card;
         let player0Hand = this.#players[0].getHand(), player1Hand = this.#players[1].getHand();
         while (1) {
+            player0Hand = player0Hand.sort(() => Math.random() - 0.5);
+            player1Hand = player1Hand.sort(() => Math.random() - 0.5);
             player0Card = player0Hand.shift();
             player1Card = player1Hand.shift();
             if (player0Card.get('value') !== player1Card.get('value')) {

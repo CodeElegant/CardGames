@@ -13,7 +13,6 @@ class WarGameMechanics {
         this.#setPlayers();
         this.#dealCards();
         this.#play();
-        // this.#testSave();
         this.#displayGameData();
     }
 
@@ -119,20 +118,6 @@ class WarGameMechanics {
         piles (six cards). If the turned-up cards are again the same rank, each player places another card face down
         and turns another card face up. The player with the higher card takes all 10 cards, and so on.
         `)*/
-    }
-
-    #testSave() {
-        const MAX = 5000;
-        let count = 0;
-        let playerWin = [];
-        let playNum;
-        while (count < 20) {
-            playerWin = [];
-            playNum = Math.floor((Math.random() * MAX));
-            playerWin.push(`Player wins! ${count}`, playNum);
-            SAVE.writeGameData(playerWin);
-            count++;
-        }
     }
 
     #displayGameData() {
